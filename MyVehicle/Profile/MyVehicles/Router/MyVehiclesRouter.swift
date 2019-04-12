@@ -7,3 +7,9 @@
 //
 
 import Foundation
+import UIKit
+
+class MyVehiclesRouter: MyVehiclesRouterInput {
+    
+    weak var view: UIViewController!
+}

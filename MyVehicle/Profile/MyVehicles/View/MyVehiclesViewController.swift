@@ -8,23 +8,41 @@
 
 import UIKit
 
-class MyVehiclesViewController: UIViewController {
+class MyVehiclesViewController: UIViewController, MyVehiclesViewInput, UITableViewDelegate, UITableViewDataSource {
+ 
+    
+    var presenter: MyVehiclesViewOutput!
 
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.estimatedRowHeight = 200
+        
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        return presenter.obtainCountOfCars()
     }
-    */
-
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let models = presenter.obtainCars()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! VehicleTableViewCell
+        let currentCar = models[indexPath.row]
+        cell.configureCell(label: currentCar.label,
+                           model: currentCar.model,
+                           year: currentCar.year)
+        return cell
+    }
+    
+    func  tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+       
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
 }
